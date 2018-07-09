@@ -28,20 +28,28 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+
+    var uploadButton = new Container(
+        width: double.infinity, height: 70.0,
+        padding: const EdgeInsets.all(0.0),
+        child: new RaisedButton(
+            child: const Text("アップロードボタン"),
+            onPressed: buttonPressed
+        )
+    );
+
     return new Scaffold(
       appBar: new AppBar(
         title: new Text(widget.title),
       ),
       body: new Center(
-        child: new Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            new Text(
-              'You have pushed the button this many times:',
-            ),
-          ],
-        ),
+        child: uploadButton
+
       ),
     );
   }
 }
+
+  void buttonPressed(){
+
+  }
