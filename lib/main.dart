@@ -1,4 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:aws_interop/aws_sdk.dart' as aws;
+import 'dart:async';
+import 'package:html/dom.dart' as dom;
+import 'package:js/js.dart';
+import 'package:jsifier/jsifier.dart';
+import 'dart:convert';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+import 'package:stripe_js/stripe_js.dart';
 
 void main() => runApp(new MyApp());
 
@@ -53,3 +62,39 @@ class _MyHomePageState extends State<MyHomePage> {
   void buttonPressed(){
 
   }
+
+Future upload() async {
+  var accessKey = '';
+  var secretKey = '';
+  var region = '';
+  var bucketName = '';
+
+  aws.config.credentials = new aws.Credentials(accessKey, secretKey);
+  aws.config.region = region;
+
+  var params = {'Bucket': bucketName, 'Key': ''};
+  var options = {'params': params};
+  var bucket = new aws.S3(options);
+//  var uploadFileBtn = querySelector('#uploadFileBtn');
+//  var uploadFileBtn =
+
+  uploadFileBtn.onClick.listen((evt) async {
+    var request = new aws.PutObjectRequest();
+    request.Body = await getFileBody();
+    request.Key = "sample.txt";
+    request.Bucket = bucketName;
+    bucket.putObject(request, allowInterop((err, data) {
+      print('error: $err');
+      print('data: $data');
+    }));
+//    bucket.putObject(request, callback)
+  });
+}
+
+Future<List<int>> getFileBody() async {
+  final Directory extDir = await getApplicationDocumentsDirectory();
+  final String dirPath = '${extDir.path}/Movies/flutter_test';
+  await new Directory(dirPath).create(recursive: true);
+  final String filePath = '$dirPath/${timestamp()}.mp4';
+
+}
